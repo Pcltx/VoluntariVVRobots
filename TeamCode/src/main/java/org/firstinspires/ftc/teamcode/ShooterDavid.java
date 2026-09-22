@@ -29,7 +29,7 @@ public class ShooterDavid extends LinearOpMode {
         encoderShooter = new VVMotor(hardwareMap.get(DcMotorEx.class,"fatast"));
         shooterDavid1.setDirection(DcMotorSimple.Direction.REVERSE);
        //shooter shooterDavid2.setDirection(DcMotorSimple.Direction.REVERSE);
-        encoderShooter.setDirection(DcMotorSimple.Direction.REVERSE, true);
+        encoderShooter.setDirection(DcMotorSimple.Direction.REVERSE, false);
         while (opModeInInit()) {}
         waitForStart();{}
         while (opModeIsActive()) {
@@ -54,6 +54,7 @@ public class ShooterDavid extends LinearOpMode {
 
             telemetry.addData("Destination", Shooter.trgPOS);
             telemetry.addData("Current Position", Shooter.actPOS);
+            telemetry.addData("shooterenc",encoderShooter.getVelocity());
             Shooter.update();
             g1.update();
             telemetry.update();
