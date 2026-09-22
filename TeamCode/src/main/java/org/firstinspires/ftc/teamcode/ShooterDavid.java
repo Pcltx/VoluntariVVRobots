@@ -6,11 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import util.VVPDFSvel;
 import util.VVMotor;
 @TeleOp
-
+@Config
 public class ShooterDavid extends LinearOpMode {
     public static DcMotor shooterDavid1;
    // public static DcMotor shooterDavid2;
@@ -23,7 +24,7 @@ public class ShooterDavid extends LinearOpMode {
 
         g1 = new util.VVGamepad(gamepad1);
         g2 = new util.VVGamepad(gamepad2);
-        shooterDavid1 = hardwareMap.get(DcMotor.class,"slider1");
+        shooterDavid1 = hardwareMap.get(DcMotor.class,"shooter");
       //shooter  shooterDavid2 = hardwareMap.get(DcMotor.class,"slider2");
         encoderShooter = new VVMotor(hardwareMap.get(DcMotorEx.class,"fatast"));
         shooterDavid1.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -59,7 +60,7 @@ public class ShooterDavid extends LinearOpMode {
         }
 
     }
-
+@Config
     public static class Shooter {
         public static double kP=0,kD=0,kF=0,kS=0,actPOS=0,trgPOS=0;
         public static util.VVPDFSvel Movement= new VVPDFSvel();
