@@ -25,38 +25,24 @@ public class ShooterDavid extends LinearOpMode {
         g1 = new util.VVGamepad(gamepad1);
         g2 = new util.VVGamepad(gamepad2);
         shooterDavid1 = hardwareMap.get(DcMotor.class,"shooter");
-      //shooter  shooterDavid2 = hardwareMap.get(DcMotor.class,"slider2");
         encoderShooter = new VVMotor(hardwareMap.get(DcMotorEx.class,"fatast"));
         shooterDavid1.setDirection(DcMotorSimple.Direction.REVERSE);
-       //shooter shooterDavid2.setDirection(DcMotorSimple.Direction.REVERSE);
         encoderShooter.setDirection(DcMotorSimple.Direction.REVERSE, false);
         while (opModeInInit()) {}
         waitForStart();{}
         while (opModeIsActive()) {
 
-            if (g1.left_trigger.pressed) {
-                Shooter.trgPOS=0;
+            if(g1.left_bumper.pressed){
+                Shooter.trgPOS = 0.0;
             }
-
-            if (g1.right_trigger.pressed) {
-                Shooter.trgPOS=40000;
+            else if(g1.right_bumper.pressed){
+                Shooter.trgPOS = 1500.0;
             }
-
-
-            if (g1.dpad_up.pressed) {
-                Shooter.trgPOS +=10000;
-            }
-
-
-            if (g1.dpad_down.pressed) {
-                Shooter.trgPOS -= 10000;
-            }
-
             telemetry.addData("Destination", Shooter.trgPOS);
             telemetry.addData("Current Position", Shooter.actPOS);
-            telemetry.addData("shooterenc",encoderShooter.getVelocity());
             Shooter.update();
             g1.update();
+            g2.update();
             telemetry.update();
         }
 
