@@ -13,6 +13,9 @@ import util.VVMotor;
 @TeleOp
 @Config
 public class ShooterDavid extends LinearOpMode {
+    public static boolean  lastState1= false;
+    public static boolean state1 = false;
+
     public static DcMotor shooterDavid1;
    // public static DcMotor shooterDavid2;
     public static VVMotor encoderShooter;
@@ -31,25 +34,28 @@ public class ShooterDavid extends LinearOpMode {
         while (opModeInInit()) {}
         waitForStart();{}
         while (opModeIsActive()) {
-
-            if(g1.left_bumper.pressed){
-                Shooter.trgPOS = 0.0;
-            }
-            else if(g1.right_bumper.pressed){
-                Shooter.trgPOS = 1500.0;
-            }
-            telemetry.addData("Destination", Shooter.trgPOS);
-            telemetry.addData("Current Position", Shooter.actPOS);
             Shooter.update();
             g1.update();
             g2.update();
-            telemetry.update();
+
+
+            if( g1.right_bumper.pressed&& !lastState1){
+                state1 = !state1;
+            }
+
+            if(state1) {
+                Shooter.trgPOS = 1250.0;
+            }
+            else {
+                Shooter.trgPOS = 0.0;
+            }
+
         }
 
     }
 @Config
     public static class Shooter {
-        public static double kP=0,kD=0,kF=0,kS=0,actPOS=0,trgPOS=0;
+        public static double kP=0.0004,kD=0.0003,kF=0,kS=0.1,actPOS=0,trgPOS=0;
         public static util.VVPDFSvel Movement= new VVPDFSvel();
 
         public static void update() {
