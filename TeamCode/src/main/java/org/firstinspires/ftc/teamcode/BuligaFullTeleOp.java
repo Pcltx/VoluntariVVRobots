@@ -23,7 +23,10 @@ public class BuligaFullTeleOp extends LinearOpMode {
     public static boolean state2 = false;
     public static double posDeschis= 0.8;
     public static  double posInchis= 1;
-
+    public static DcMotor fatadr;
+    public static DcMotor fatast;
+    public static DcMotor spatedr;
+    public static DcMotor spatest;
     public Servo labaServo;
     public static boolean  lastState1= false;
     public static boolean state1 = false;
@@ -44,7 +47,13 @@ public class BuligaFullTeleOp extends LinearOpMode {
         encoderShooter = new VVMotor(hardwareMap.get(DcMotorEx.class,"fatast"));
         shooterDavid1.setDirection(DcMotorSimple.Direction.REVERSE);
         encoderShooter.setDirection(DcMotorSimple.Direction.REVERSE, false);
+        fatast = hardwareMap.dcMotor.get("fatast");
+        fatadr = hardwareMap.dcMotor.get("fatadr");
+        spatest = hardwareMap.dcMotor.get("spatest");
+        spatedr = hardwareMap.dcMotor.get("spatedr");
 
+        fatast.setDirection(DcMotor.Direction.REVERSE);
+        spatest.setDirection(DcMotor.Direction.REVERSE);
         while (opModeInInit()){
 
         }
@@ -90,7 +99,20 @@ public class BuligaFullTeleOp extends LinearOpMode {
                Shooter.trgPOS = 0.0;
             }
 
+            double y = -g1.left_joystick.y;
+            double x = g1.left_joystick.x * 1.1;
+            double rx = g1.right_joystick.x;
 
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double fatastp = (y + x + rx) / denominator;
+            double spatestp = (y - x + rx) / denominator;
+            double fatadrp = (y - x - rx) / denominator;
+            double spatedrp = (y + x - rx) / denominator;
+
+            fatadr.setPower(fatadrp);
+            spatest.setPower(spatestp);
+            fatast.setPower(fatastp);
+            spatedr.setPower(spatedrp);
 
 
 
