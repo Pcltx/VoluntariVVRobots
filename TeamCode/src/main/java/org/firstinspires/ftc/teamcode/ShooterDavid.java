@@ -17,7 +17,7 @@ public class ShooterDavid extends LinearOpMode {
     public static boolean state1 = false;
 
     public static DcMotor shooterDavid1;
-   // public static DcMotor shooterDavid2;
+    public static DcMotor shooterDavid2;
     public static VVMotor encoderShooter;
     public static util.VVGamepad g1;
     public static util.VVGamepad g2;
@@ -27,7 +27,8 @@ public class ShooterDavid extends LinearOpMode {
 
         g1 = new util.VVGamepad(gamepad1);
         g2 = new util.VVGamepad(gamepad2);
-        shooterDavid1 = hardwareMap.get(DcMotor.class,"shooter");
+        shooterDavid1 = hardwareMap.get(DcMotor.class,"dreapta");
+        shooterDavid2= hardwareMap.get(DcMotor.class,"stanga");
         encoderShooter = new VVMotor(hardwareMap.get(DcMotorEx.class,"fatast"));
         shooterDavid1.setDirection(DcMotorSimple.Direction.REVERSE);
         encoderShooter.setDirection(DcMotorSimple.Direction.REVERSE, false);
@@ -63,7 +64,7 @@ public class ShooterDavid extends LinearOpMode {
             Movement.set_coeffs(kP,kD,kF,kS);
             double power=Movement.update(actPOS, trgPOS);
             shooterDavid1.setPower(power);
-
+            shooterDavid2.setPower(power);
 
         }
 

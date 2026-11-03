@@ -20,6 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 //trb modificate toate valorile prin tuner da na
 public class Constants {
+
     public static MecanumConfig drivetrainConfig = new MecanumConfig(c -> {
         c.frontLeftName.set("fatast");
         c.frontRightName.set("fatadr");
@@ -31,30 +32,27 @@ public class Constants {
         c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
     });
 
-    public static PinpointConfig localizerConfig = new PinpointConfig(
-            c -> {c.name.set("pinpoint");
-                c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-                c.xPodOffset.set(-9.322671965351256*25.4);
-                c.yPodOffset.set(-3.2275853194589694*25.4);
-                c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
-                c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.REVERSED);
-                c.globalDistanceUnit.set(DistanceUnit.MM);
-                c.offsetUnits.set(DistanceUnit.MM);
-            }
-    );
-//hepl
-    public static ForesightConfig foresightConfig = new ForesightConfig(
+    public static PinpointConfig localizerConfig = new PinpointConfig(c -> {
+        c.name.set("pinpoint");
+        c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        c.xPodOffset.set(1.0265487761009398);
+        c.yPodOffset.set(-5.02982762854869);
+        c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        c.globalDistanceUnit.set(DistanceUnit.INCH);
+        c.offsetUnits.set(DistanceUnit.INCH);
+    });
 
-            c -> {
-            }
-    );
 
-    public static Follower create(HardwareMap h) {
-        return new Follower(
-                new PinpointLocalizer(h, localizerConfig),
-                new Mecanum(h, drivetrainConfig),
-                new Foresight(foresightConfig)
-        );
-    }
+
+
+
+  //  public static Follower create(HardwareMap h) {
+  //      return new Follower(
+  //              new PinpointLocalizer(h, localizerConfig),
+  //              new Mecanum(h, drivetrainConfig),
+ //               new Foresight(foresightConfig)
+ //       );
+ //   }
 
 }

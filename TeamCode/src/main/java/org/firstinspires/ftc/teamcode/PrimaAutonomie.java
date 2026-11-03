@@ -54,7 +54,7 @@ public class PrimaAutonomie extends OpMode {
     public void init() {
         Scheduler.reset();
 
-        follower = Constants.create(hardwareMap);
+       // follower = Constants.create(hardwareMap);
         follower.setPose(startPose);
         follower.update();
 
