@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,13 +16,14 @@ import util.VVGamepad;
 import util.VVMotor;
 import util.VVPDFSvel;
 
-@TeleOp
+@TeleOp(name = "bTeleOpAdelin")
 public class BuligaFullTeleOp extends LinearOpMode {
 
 
     public enum States {
         HOME,
         INTAKE,
+        FLOWER,
         SHOOT
     }
 
@@ -40,10 +42,23 @@ public boolean timerStarted=false;
 
     public static VVMotor encoderShooter;
     public Servo labaServo;
-    public static double posDeschis = 0;
-    public static double posInchis = 0.12;
-    public static double intakePower = 1.0;
-    public static double transferPower = 0.8;
+    public Servo flowerServo;
+@Configurable
+@Config
+    public static class Variables{
+        static double posDeschis = 0;
+        static  double posInchis = 0.12;
+        static   double posLasat= 0;
+        static   double posRidicat = 0.12;
+        static   double intakePower = 1.0;
+        static double transferPower = 0.8;
+
+
+
+
+
+    }
+
 
     @Override
     public void runOpMode() {
@@ -53,6 +68,7 @@ public boolean timerStarted=false;
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         transfer.setDirection(DcMotorSimple.Direction.REVERSE);
         labaServo = hardwareMap.get(Servo.class, "labutza");
+        flowerServo = hardwareMap.get(Servo.class, "flower");
         shooterDavid1 = hardwareMap.get(DcMotor.class, "dreapta");
         shooterDavid2 = hardwareMap.get(DcMotor.class, "stanga");
         encoderShooter = new VVMotor(hardwareMap.get(DcMotorEx.class, "fatast"));
@@ -84,20 +100,42 @@ public boolean timerStarted=false;
                     transfer.setPower(0);
                     intake.setPower(0);
                     Shooter.trgPOS = 0;
-                    labaServo.setPosition(posInchis);
+                    flowerServo.setPosition(Variables.posRidicat);
+                    labaServo.setPosition(Variables.posInchis);
                     if (g1.right_bumper.pressed) {
                         current = States.SHOOT;
                     }
                     if (g1.right_trigger.pressed) {
                         current = States.INTAKE;
                     }
+                    if (g1.left_bumper.pressed) {
+                        current = States.FLOWER;
+                    }
+                    break;
+
+                case FLOWER:
+                    transfer.setPower(Variables.transferPower);
+                    intake.setPower(Variables.intakePower);
+                    flowerServo.setPosition(Variables.posLasat);
+                    Shooter.trgPOS = 0;
+                    labaServo.setPosition(Variables.posInchis);
+                    if (g1.right_bumper.pressed) {
+                        current = States.SHOOT;
+                    }
+                    if (g1.right_trigger.pressed) {
+                        current = States.INTAKE;
+                    }
+                    if (g1.left_bumper.pressed) {
+                        current = States.HOME;
+                    }
                     break;
 
                 case INTAKE:
-                    transfer.setPower(transferPower);
-                    intake.setPower(intakePower);
+                    transfer.setPower(Variables.transferPower);
+                    intake.setPower(Variables.intakePower);
+                    flowerServo.setPosition(Variables.posRidicat);
                     Shooter.trgPOS = 0;
-                    labaServo.setPosition(posInchis);
+                    labaServo.setPosition(Variables.posInchis);
                     if (g1.right_trigger.pressed) {
                         current = States.HOME;
                     }
@@ -107,13 +145,14 @@ public boolean timerStarted=false;
                     break;
 
                 case SHOOT:
-                    transfer.setPower(transferPower);
+                    transfer.setPower(Variables.transferPower);
+                    flowerServo.setPosition(Variables.posRidicat);
                     if(!timerStarted) {
                         timer.reset();
                         timerStarted = true;
                     }
                     if (timerStarted && timer.seconds()>2)
-                    labaServo.setPosition(posDeschis);
+                    labaServo.setPosition(Variables.posDeschis);
                     if (g1.right_bumper.pressed) {
                         current = States.HOME;
                         timerStarted = false;
@@ -133,12 +172,20 @@ public boolean timerStarted=false;
 
 
                     Shooter.trgPOS = Shooter.configPos;
+                    telemetry.addData("Shooter currentPosition" ,Shooter.configPos);
+                    telemetry.update();
                     break;
 
                 default:
                     current = States.HOME;
                     break;
             }
+
+            if(g1.dpad_right.held) {
+                transfer.setPower(-Variables.transferPower);
+                intake.setPower(-Variables.intakePower);
+            }
+
 
             double y = -g1.left_joystick.y;
             double x = g1.left_joystick.x * 1.1;
@@ -160,6 +207,7 @@ public boolean timerStarted=false;
     }
 
     @Config
+    @Configurable
     public static class Shooter {
         public static double configPos = 1700;
         public static double kP = 0.0004;
